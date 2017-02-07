@@ -1,15 +1,11 @@
-# Slim 3 Skeleton
+# Vehicle Sign Up
 
-This is a simple skeleton project for Slim 3 that includes Twig, Flash messages and Monolog.
-
-## Create your project:
-
-    $ composer create-project --no-interaction --stability=dev akrabat/slim3-skeleton my-app
+This is a simple app for vehicle signup.
 
 ### Run it:
 
 1. `$ cd my-app`
-2. `$ php -S 0.0.0.0:8888 -t public public/index.php`
+2. `$ php compose.phar start`
 3. Browse to http://localhost:8888
 
 ## Key directories
@@ -29,5 +25,5 @@ This is a simple skeleton project for Slim 3 that includes Twig, Flash messages 
 * `app/dependencies.php`: Services for Pimple
 * `app/middleware.php`: Application middleware
 * `app/routes.php`: All application routes are here
-* `app/src/Action/HomeAction.php`: Action class for the home page
+* `app/src/Home.php`: Action class for the home page
 * `app/templates/home.twig`: Twig template file for the home page
