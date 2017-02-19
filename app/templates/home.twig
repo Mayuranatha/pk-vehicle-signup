@@ -71,7 +71,7 @@
                         <ul>
                             {% for reservation in car.Reservations %}
                             <li class="is-car-reservation">
-                                <div class="is-hour-range">{{ reservation.start|date("hh:mm") }} - {{ reservation.end|date("hh:mm") }}</div>
+                                <div class="is-hour-range">{{ reservation.start|date("H:i") }} - {{ reservation.end|date("H:i") }}</div>
                                 <p><i>{{ reservation.who }}</i> {{ reservation.comment }}. <i class="fa fa-edit"></i></p>
                                 <hr class="pretty">
                             </li>

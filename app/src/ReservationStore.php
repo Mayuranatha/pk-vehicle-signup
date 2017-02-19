@@ -30,7 +30,7 @@ final class ReservationStore
     public function get_data_for_template() {
         $days = $this->get_days();
         $cars = $this->get_cars();
-        $data = [];
+        $data = Array("days" => Array());
 
         foreach ($days as $day) {
             $item = array(
@@ -47,7 +47,7 @@ final class ReservationStore
                 array_push($item["Cars"], $carItem);
             }
 
-            array_push($data, $item);
+            array_push($data["days"], $item);
         }
 
         return $data;
