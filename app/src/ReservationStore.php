@@ -5,6 +5,7 @@ use Psr\Log\LoggerInterface;
 final class ReservationStore
 {
     private $logger;
+    private $days;
 
     public function __construct(LoggerInterface $logger) {
         $this->logger = $logger;
@@ -16,6 +17,14 @@ final class ReservationStore
             'car' => 'car_id',
             'reservation' => 'reservation_id',
         ));
+
+        // get the next seven days
+        $daysJson = file_get_contents("https://akasha.hindu.org:8080/days/7");
+        $this->days = json_decode($daysJson,true);
+    }
+
+    public function get_days() {
+        return $this->days;
     }
 
     public function get_cars() {

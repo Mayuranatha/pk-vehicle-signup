@@ -1,13 +1,106 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Slim 3</title>
+        <title>Vehicle Sign Up</title>
         <link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
-        <link href='{{ base_url() }}/css/style.css' rel='stylesheet' type='text/css'>
+        <link href='{{ base_url() }}/css/bulma.css' rel='stylesheet' type='text/css'>
+        <link href='{{ base_url() }}/css/font-awesome.css' rel='stylesheet' type='text/css'>
+        <style>
+            .is-hour-range {
+                font-size: 1.1em;
+                font-weight: 500;
+                display: block;
+            }
+
+            .is-car-reservation {
+
+            }
+
+            hr.pretty {
+                border-top: 1px solid #8c8b8b;
+                text-align: center;
+            }
+            hr.pretty:after {
+                content: '§';
+                display: inline-block;
+                position: relative;
+                top: -14px;
+                padding: 0 10px;
+                background: #ffffff;
+                color: #8c8b8b;
+                font-size: 18px;
+                -webkit-transform: rotate(60deg);
+                -moz-transform: rotate(60deg);
+                transform: rotate(60deg);
+            }
+        </style>
     </head>
     <body>
-        <h1>Slim</h1>
-        <div>a microframework for PHP</div>
+        <section class="hero is-primary is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Vehicle Sign Up
+                    </h1>
+                    <h2 class="subtitle">
+                        This is <i>alpha</i> software, please report bugs to <a href="mailto:mayuran@hindu.org">Sadhaka Mayuranatha</a>.
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+        <br>
+        <div class="container">
+            {%  for day in days %}
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+
+                    {% if day.SunOrStar == "Star" %}
+                    <div class="tile box is-child notification is-danger is-2">
+                    {% else %}
+                    <div class="tile box is-child notification is-warning is-2">
+                    {%  endif %}
+                        <p class="title"> {{ day.SunOrStar }} {{ day.SunOrStar_Num }}</p>
+                        <p class="subtitle">{{ day.Date_|date("m/d/Y") }}</p>
+                    </div>
+
+                    <div class="tile box is-child">
+                        <p class="title"> Leaf</p>
+
+                        <ul>
+                            <li class="is-car-reservation">
+                                <div class="is-hour-range">13h00 - 14h00</div>
+                                <p><i>BR</i> will drive to Kappaa to get groceries. <i class="fa fa-edit"></i></p>
+                                <hr class="pretty">
+                            </li>
+                            <li class="is-car-reservation">
+                                <div class="is-hour-range">13h00 - 14h00</div>
+                                <p><i>BR</i> will drive to Kappaa to get groceries. <i class="fa fa-edit"></i></p>
+                                <hr class="pretty">
+                            </li>
+                            <li class="is-car-reservation">
+                                <div class="is-hour-range">13h00 - 14h00</div>
+                                <p><i>BR</i> will drive to Kappaa to get groceries. <i class="fa fa-edit"></i></p>
+                                <hr class="pretty">
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                    <div class="tile box is-child">
+                        <p class="title"> Minivan</p>
+                    </div>
+
+                    <div class="tile box is-child">
+                        <p class="title"> Mustang </p>
+                    </div>
+
+                </div>
+
+            </div>
+            {%  endfor %}
+        </div>
     </body>
 </html>
         

@@ -36,8 +36,12 @@ final class Home
     public function index(Request $request, Response $response, $args)
     {
         $this->logger->info("Home page action dispatched from home.php");
+
+        $data = Array(
+            "days" => $this->storage->get_days()
+        );
         
-        $this->view->render($response, 'home.twig');
+        $this->view->render($response, 'home.twig', $data);
         return $response;
     }
 }
