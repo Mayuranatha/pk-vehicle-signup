@@ -37,9 +37,7 @@ final class Home
     {
         $this->logger->info("Home page action dispatched from home.php");
 
-        $data = Array(
-            "days" => $this->storage->get_days()
-        );
+        $data = $this->storage->get_data_for_template();
         
         $this->view->render($response, 'home.twig', $data);
         return $response;

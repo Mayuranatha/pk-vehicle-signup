@@ -27,6 +27,27 @@ final class ReservationStore
         return $this->days;
     }
 
+    public function get_data_for_template() {
+        $days = $this->get_days();
+        $cars = $this->get_cars();
+        $data = [];
+
+        foreach ($days as $day) {
+            $item = array(
+                "SunOrStar" => $day["SunOrStar"],
+                "Date" => $day["Date_"],
+                "SunOrStar_Num" => $day["SunOrStar_Num"],
+                "Cars" => array()
+            );
+
+            foreach ($cars as $car) {
+                $carItem = $car;
+                $carItem["Reservations"] = $this->get_reservations_for_car($car, $day);
+            }
+        }
+
+    }
+
     public function get_cars() {
         $cars = ORM::for_table('car')->where('is_available', 1)->find_array();
         $this->logger->info("SQL: " . ORM::get_last_query());
@@ -53,8 +74,13 @@ final class ReservationStore
         return $car->is_available;
     }
 
-    public function get_reservations_for_car($car) {
+    public function get_reservations_for_car($car, $day) {
+        $reservations = ORM::for_table("reservation")
+            ->where("car_id", $car["car_id"])
+            ->where("start", $day)
+            ->find_array();
 
+        return $reservations;
     }
 
     public function make_reservation($id, $data) {
