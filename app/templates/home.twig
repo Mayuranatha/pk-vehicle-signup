@@ -16,6 +16,10 @@
 
             }
 
+            .is-unavailable {
+                background-color: #dedede;
+            }
+
             hr.pretty {
                 border-top: 1px solid #8c8b8b;
                 text-align: center;
@@ -65,14 +69,19 @@
                     </div>
 
                     {% for car in day.Cars %}
+                    {%  if car.is_available == 1 %}
                     <div class="tile box is-child">
+                    {%  else %}
+                    <div class="tile box is-child is-unavailable is-disabled">
+                    {% endif %}
                         <p class="title"> {{ car.name }}</p>
+                        <p class="subtitle">{{ car.comment }}</p>
 
                         <ul>
                             {% for reservation in car.Reservations %}
                             <li class="is-car-reservation">
                                 <div class="is-hour-range">{{ reservation.start|date("H:i") }} - {{ reservation.end|date("H:i") }}</div>
-                                <p><i>{{ reservation.who }}</i> {{ reservation.comment }}. <i class="fa fa-edit"></i></p>
+                                <p><i>{{ reservation.who }}</i> &mdash; {{ reservation.comment }}. <i class="fa fa-edit"></i></p>
                                 <hr class="pretty">
                             </li>
                             {% endfor %}
