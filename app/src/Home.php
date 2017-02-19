@@ -42,4 +42,14 @@ final class Home
         $this->view->render($response, 'home.twig', $data);
         return $response;
     }
+
+    public function debug(Request $request, Response $response, $args)
+    {
+        $this->logger->info("Debug page action dispatched from home.php");
+
+        $data = $this->storage->get_data_for_template();
+
+        $newResponse = $response->withJson($data,200);
+        return $newResponse;
+    }
 }

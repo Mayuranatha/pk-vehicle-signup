@@ -43,8 +43,14 @@ final class ReservationStore
             foreach ($cars as $car) {
                 $carItem = $car;
                 $carItem["Reservations"] = $this->get_reservations_for_car($car, $day);
+
+                array_push($item["Cars"], $carItem);
             }
+
+            array_push($data, $item);
         }
+
+        return $data;
 
     }
 
@@ -77,7 +83,7 @@ final class ReservationStore
     public function get_reservations_for_car($car, $day) {
         $reservations = ORM::for_table("reservation")
             ->where("car_id", $car["car_id"])
-            ->where("start", $day)
+            //->where("start", $day)
             ->find_array();
 
         return $reservations;

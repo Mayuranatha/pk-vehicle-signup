@@ -64,37 +64,23 @@
                         <p class="subtitle">{{ day.Date_|date("m/d/Y") }}</p>
                     </div>
 
+                    {% for car in day.Cars %}
                     <div class="tile box is-child">
-                        <p class="title"> Leaf</p>
+                        <p class="title"> {{ car.name }}</p>
 
                         <ul>
+                            {% for reservation in car.Reservations %}
                             <li class="is-car-reservation">
-                                <div class="is-hour-range">13h00 - 14h00</div>
-                                <p><i>BR</i> will drive to Kappaa to get groceries. <i class="fa fa-edit"></i></p>
+                                <div class="is-hour-range">{{ reservation.start|date("hh:mm") }} - {{ reservation.end|date("hh:mm") }}</div>
+                                <p><i>{{ reservation.who }}</i> {{ reservation.comment }}. <i class="fa fa-edit"></i></p>
                                 <hr class="pretty">
                             </li>
-                            <li class="is-car-reservation">
-                                <div class="is-hour-range">13h00 - 14h00</div>
-                                <p><i>BR</i> will drive to Kappaa to get groceries. <i class="fa fa-edit"></i></p>
-                                <hr class="pretty">
-                            </li>
-                            <li class="is-car-reservation">
-                                <div class="is-hour-range">13h00 - 14h00</div>
-                                <p><i>BR</i> will drive to Kappaa to get groceries. <i class="fa fa-edit"></i></p>
-                                <hr class="pretty">
-                            </li>
-
+                            {% endfor %}
                         </ul>
 
                     </div>
+                    {% endfor %}
 
-                    <div class="tile box is-child">
-                        <p class="title"> Minivan</p>
-                    </div>
-
-                    <div class="tile box is-child">
-                        <p class="title"> Mustang </p>
-                    </div>
 
                 </div>
 
