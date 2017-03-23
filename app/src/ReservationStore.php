@@ -115,6 +115,8 @@ final class ReservationStore
         interval algebra: http://en.wikipedia.org/wiki/Allen%27s_Interval_Algebra
          */
 
+
+
     }
 
     public function update_reservation($id, $data) {

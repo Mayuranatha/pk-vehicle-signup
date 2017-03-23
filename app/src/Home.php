@@ -43,6 +43,22 @@ final class Home
         return $response;
     }
 
+    public function new_signup(Request $request, Response $response, $args)
+    {
+        $this->logger->info("New sign up");
+
+        $parsedBody = $request->getParsedBody();
+
+        $this->logger->info("JSON:", $parsedBody);
+
+        $id = $parsedBody["id"];
+        $data = $parsedBody["data"];
+        $result = $this->storage->make_reservation($id, $data);
+
+        $newResponse = $response->withJson($result,200);
+        return $newResponse;
+    }
+
     public function debug(Request $request, Response $response, $args)
     {
         $this->logger->info("Debug page action dispatched from home.php");

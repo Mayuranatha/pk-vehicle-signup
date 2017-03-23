@@ -5,12 +5,14 @@ function displayNewReservationModal(ev) {
     var who = this.getAttribute("data-who");
     var comment = this.getAttribute("data-comment");
     var reservationId = this.getAttribute("data-reservationId");
+    var hour_start = this.getAttribute("reservation-hour-start");
+    var hour_end = this.getAttribute("reservation-hour-end");
 
 
     var modal = document.getElementById("signup-modal");
 
     // Making sure that we "deselect" all cars before showing the modal...
-    var allCarOptions = document.querySelectorAll("#is-car-selector option");
+    var allCarOptions = document.querySelectorAll("#reservation-car option");
     for(var i = 0; i<allCarOptions.length; i++) {
         allCarOptions[i].removeAttribute("selected");
     }
@@ -19,6 +21,28 @@ function displayNewReservationModal(ev) {
     if (carId) {
         document.getElementById("car-" + carId).setAttribute("selected", true);
     }
+
+    if (hour_start) {
+        document.getElementById("reservation-hour-start").value = hour_start;
+    }
+
+    if (hour_end) {
+        document.getElementById("reservation-hour-end").value = hour_end;
+    }
+
+    if (day) {
+        document.getElementById("reservation-date").value = day;
+    }
+
+    if (comment) {
+        document.getElementById("reservation-comments").value = comment;
+    }
+
+    if (who) {
+        document.getElementById("reservation-who").value = who;
+    }
+
+
 
     modal.classList.add("is-active");
     console.log("[MODAL] new sign up request",carName, day);
@@ -30,6 +54,28 @@ function displayNewReservationModal(ev) {
  */
 
 function saveReservation() {
+    var date_created = document.getElementById("reservation-date").value
+    var hour_start = document.getElementById("reservation-hour-start").value
+    var hour_end = document.getElementById("reservation-hour-end").value
+    var who = document.getElementById("reservation-who").value
+    var comments = document.getElementById("reservation-comments").value
+    var id = document.getElementById("reservation-car").value
+
+    var obj = {
+        id: id,
+        data: {
+            date_created: date_created,
+            start: hour_start,
+            end: hour_end,
+            who: who,
+            comment: comments
+        }
+    }
+
+    $.post("/signup/new", obj, function(data) {
+        console.log("[AJAX] /signup/new", data);
+    });
+
 
 }
 
@@ -59,3 +105,5 @@ for(var i = 0; i<allCloseModalButtons.length; i++) {
         document.getElementById(modalId).classList.remove("is-active");
     });
 }
+
+$('.timepicker').wickedpicker();
