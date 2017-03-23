@@ -74,7 +74,7 @@
                     {%  else %}
                     <div class="tile box is-child is-unavailable is-disabled">
                     {% endif %}
-                        <p class="title"> {{ car.name }}</p>
+                        <p class="title"> {{ car.name }} <i class="fa fa-plus-square-o is-signup-trigger" data-car-id="{{ car.car_id }}" data-car-name="{{ car.name }}" data-day="{{ day.Date_|date("m/d/Y") }}"></i> </p>
                         <p class="subtitle">{{ car.comment }}</p>
 
                         <ul>
@@ -96,6 +96,58 @@
             </div>
             {%  endfor %}
         </div>
+        <div id="signup-modal" class="modal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Car Reservation</p>
+                    <button class="delete has-modal-close-behavior" data-modal="signup-modal"></button>
+                </header>
+                <section class="modal-card-body">
+
+                    <div class="field">
+                        <label class="label">Which car is being reserved?</label>
+                        <p class="control">
+                            <span class="select">
+                              <select id="is-car-selector">
+                                  {% for car in days[0].Cars %}
+                                  {%  if car.is_available == 1 %}
+                                <option id="car-{{ car.car_id }}" value="{{ car.car_id }}">{{ car.name }}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                              </select>
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Which date?</label>
+                        <p class="control">
+                            <input class="input" type="date" placeholder="Text input">
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Who is making the reservation?</label>
+                        <p class="control">
+                            <input class="input" type="text" placeholder="Text input">
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Comments about the reservation</label>
+                        <p class="control">
+                            <textarea class="textarea" placeholder="Textarea"></textarea>
+                        </p>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <a id="is-save-reservation-trigger" class="button is-success">Save changes</a>
+                    <a class="button has-modal-close-behavior" data-modal="signup-modal">Cancel</a>
+                </footer>
+            </div>
+        </div>
+        <script src="{{ base_url() }}/js/app.js"></script>
     </body>
 </html>
         
