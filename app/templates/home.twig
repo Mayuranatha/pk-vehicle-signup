@@ -67,7 +67,7 @@
                     <div class="tile box is-child notification is-warning is-2">
                     {%  endif %}
                         <p class="title"> {{ day.SunOrStar }} {{ day.SunOrStar_Num }}</p>
-                        <p class="subtitle">{{ day.Date_|date("m/d/Y") }}</p>
+                        <p class="subtitle">{{ day.Date|date("m/d/Y") }}</p>
                     </div>
 
                     {% for car in day.Cars %}
@@ -76,7 +76,7 @@
                     {%  else %}
                     <div class="tile box is-child is-unavailable is-disabled">
                     {% endif %}
-                        <p class="title"> {{ car.name }} <i class="fa fa-plus-square-o is-signup-trigger" data-car-id="{{ car.car_id }}" data-car-name="{{ car.name }}" data-day="{{ day.Date_|date("m/d/Y") }}"></i> </p>
+                        <p class="title"> {{ car.name }} <i class="fa fa-plus-square-o is-signup-trigger" data-car-id="{{ car.car_id }}" data-car-name="{{ car.name }}" data-day="{{ day.Date|date("m/d/Y") }}"></i> </p>
                         <p class="subtitle">{{ car.comment }}</p>
 
                         <ul>
