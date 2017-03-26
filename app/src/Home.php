@@ -55,7 +55,17 @@ final class Home
         $data = $parsedBody["data"];
         $result = $this->storage->make_reservation($id, $data);
 
-        $newResponse = $response->withJson($result,200);
+        if ($result) {
+            $data = Array(
+                "status" => "ok"
+            );
+        } else {
+            $data = Array(
+                "status" => "error"
+            );
+        }
+
+        $newResponse = $response->withJson($data,200);
         return $newResponse;
     }
 

@@ -116,6 +116,25 @@ final class ReservationStore
          */
 
 
+        /*
+         * Implementation below makes a reservation without checking for conflicts...
+         * TODO: Check for conflicts (cue interval algebra above)
+         */
+
+        $date_created = date(DATE_RFC3339);
+        $reservation = ORM::for_table('reservation')->create();
+
+        $reservation->set('who', $data["who"]);
+        $reservation->set('comment', $data["comment"]);
+        $reservation->set('car_id', $id);
+        $reservation->set('date_created', $date_created);
+        $reservation->set('start', $date_created);
+        $reservation->set('end', $date_created);
+
+
+        $result = $reservation->save();
+
+        return $result;
 
     }
 

@@ -54,7 +54,7 @@ function displayNewReservationModal(ev) {
  */
 
 function saveReservation() {
-    var date_created = document.getElementById("reservation-date").value
+    var reservation_date = document.getElementById("reservation-date").value
     var hour_start = document.getElementById("reservation-hour-start").value
     var hour_end = document.getElementById("reservation-hour-end").value
     var who = document.getElementById("reservation-who").value
@@ -64,7 +64,7 @@ function saveReservation() {
     var obj = {
         id: id,
         data: {
-            date_created: date_created,
+            date: reservation_date,
             start: hour_start,
             end: hour_end,
             who: who,
@@ -74,6 +74,12 @@ function saveReservation() {
 
     $.post("/signup/new", obj, function(data) {
         console.log("[AJAX] /signup/new", data);
+
+        if (data.status === "ok") {
+            window.location.reload();
+        } else {
+            alert("Error making reservation");
+        }
     });
 
 
