@@ -72,6 +72,8 @@ function saveReservation() {
         }
     }
 
+    document.getElementById("reservation-modal-footer").innerHTML = "<i class=\"fa fa-spinner fa-spin\"></i>";
+
     $.post("/signup/new", obj, function(data) {
         console.log("[AJAX] /signup/new", data);
 

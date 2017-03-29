@@ -1,6 +1,7 @@
 <?php
 
 use Psr\Log\LoggerInterface;
+use Exception;
 
 final class ReservationStore
 {
@@ -108,6 +109,7 @@ final class ReservationStore
                EXISTS (SELECT 1
                        FROM reservation AS other
                        WHERE other.reservation_id != reservation.reservation_id
+                         AND reservation.car_id = other.car_id
                          AND other.end > reservation.start
                          AND other.start < reservation.end) AS conflict
         FROM reservation
@@ -122,17 +124,35 @@ final class ReservationStore
          */
 
         $date_created = date(DATE_RFC3339);
+        $start = $data["date"] . " " . $data["start"];
+        $end = $data["date"] . " " . $data["end"];
+        $this->logger->info("START: {$start}");
+        $this->logger->info("END: {$end}");
+
+
+
         $reservation = ORM::for_table('reservation')->create();
 
         $reservation->set('who', $data["who"]);
         $reservation->set('comment', $data["comment"]);
         $reservation->set('car_id', $id);
         $reservation->set('date_created', $date_created);
-        $reservation->set('start', $date_created);
-        $reservation->set('end', $date_created);
+        try {
+            $start_secs = date_create_from_format("d/m/Y H:i", $start)->format("U");
+            $end_secs = date_create_from_format("d/m/Y H:i", $end)->format("U");
+            $this->logger->info("SECS: {$start_secs} | {$end_secs}");
+
+            $reservation->set('start', $start_secs);
+            $reservation->set('end', $end_secs);
 
 
-        $result = $reservation->save();
+            $result = $reservation->save();
+            $this->logger->info("SQL: " . ORM::get_last_query());
+        } catch(Exception $e) {
+            $this->logger->error("EXCEPTION: " . $e->getMessage());
+            throw $e;
+        }
+
 
         return $result;
 
