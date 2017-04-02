@@ -105,6 +105,7 @@ for(var i = 0; i<allAddButtons.length; i++) {
  * Code to close modal dialogs.
  */
 
+
 var allCloseModalButtons = document.querySelectorAll(".has-modal-close-behavior");
 
 for(var i = 0; i<allCloseModalButtons.length; i++) {

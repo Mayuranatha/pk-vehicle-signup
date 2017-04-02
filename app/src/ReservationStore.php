@@ -82,10 +82,16 @@ final class ReservationStore
     }
 
     public function get_reservations_for_car($car, $day) {
+        $this->logger->info("Get Reservations:", $day);
+
         $reservations = ORM::for_table("reservation")
             ->where("car_id", $car["car_id"])
-            //->where("start", $day)
+            ->where_like("start", substr($day["Date_"], 0, 10) . "%")
+            ->order_by_asc("start")
             ->find_array();
+
+        $this->logger->info("SQL: " . ORM::get_last_query());
+
 
         return $reservations;
     }
@@ -138,8 +144,8 @@ final class ReservationStore
         $reservation->set('car_id', $id);
         $reservation->set('date_created', $date_created);
         try {
-            $start_secs = date_create_from_format("d/m/Y H:i", $start)->format("U");
-            $end_secs = date_create_from_format("d/m/Y H:i", $end)->format("U");
+            $start_secs = date_create_from_format("m/d/Y H:i", $start)->format("Y-m-d H:i");
+            $end_secs = date_create_from_format("m/d/Y H:i", $end)->format("Y-m-d H:i");
             $this->logger->info("SECS: {$start_secs} | {$end_secs}");
 
             $reservation->set('start', $start_secs);
