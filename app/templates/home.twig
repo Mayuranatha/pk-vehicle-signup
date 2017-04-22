@@ -83,7 +83,20 @@
                             {% for reservation in car.Reservations %}
                             <li class="is-car-reservation">
                                 <div class="is-hour-range">{{ reservation.start|date("H:i") }} - {{ reservation.end|date("H:i") }}</div>
-                                <p><i>{{ reservation.who }}</i> &mdash; {{ reservation.comment }}. <i class="fa fa-edit"></i></p>
+                                <p>
+                                    <i>{{ reservation.who }}</i> &mdash; {{ reservation.comment }}.
+                                    <span class="is-edit-trigger"
+                                          data-reservation-id="{{ reservation.reservation_id }}"
+                                          data-car-id="{{ car.car_id }}"
+                                          data-car-name="{{ car.name }}"
+                                          data-day="{{ day.Date|date("m/d/Y") }}"
+                                          data-comment="{{ reservation.comment }}"
+                                          data-start="{{ reservation.start }}"
+                                          data-end="{{ reservation.end }}"
+                                          data-who="{{ reservation.who }}">
+                                        <i class="fa fa-edit"></i>
+                                    </span>
+                                </p>
                                 <hr class="pretty">
                             </li>
                             {% endfor %}
@@ -98,78 +111,9 @@
             </div>
             {%  endfor %}
         </div>
-        <div id="signup-modal" class="modal">
-            <div class="modal-background"></div>
-            <div class="modal-card">
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Car Reservation</p>
-                    <button class="delete has-modal-close-behavior" data-modal="signup-modal"></button>
-                </header>
-                <section class="modal-card-body">
+        {% include 'signup-modal.twig' with days %}
+        {% include 'edit-modal.twig' with days %}
 
-                    <div class="field">
-                        <label class="label">Which car is being reserved?</label>
-                        <p class="control">
-                            <span class="select">
-                              <select id="reservation-car">
-                                  {% for car in days[0].Cars %}
-                                  {%  if car.is_available == 1 %}
-                                <option id="car-{{ car.car_id }}" value="{{ car.car_id }}">{{ car.name }}</option>
-                                  {% endif %}
-                                  {% endfor %}
-                              </select>
-                            </span>
-                        </p>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Which date?</label>
-                        <p class="control">
-                            <input id="reservation-date" class="input" type="date" placeholder="Text input">
-                        </p>
-                    </div>
-
-                    <div class="columns">
-                        <div class="column is-half">
-                            <div class="field">
-                                <label class="label">Start hour?</label>
-                                <p class="control">
-                                    <input id="reservation-hour-start" class="input" type="timepicker" class="timepicker">
-                                </p>
-                            </div>
-                        </div>
-
-
-                        <div class="column is-half">
-                            <div class="field">
-                                <label class="label">End hour?</label>
-                                <p class="control">
-                                    <input id="reservation-hour-end" class="input" type="timepicker" class="timepicker">
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Who is making the reservation?</label>
-                        <p class="control">
-                            <input id="reservation-who" class="input" type="text" placeholder="Text input">
-                        </p>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Comments about the reservation</label>
-                        <p class="control">
-                            <textarea id="reservation-comments" class="textarea" placeholder="Textarea"></textarea>
-                        </p>
-                    </div>
-                </section>
-                <footer id="reservation-modal-footer" class="modal-card-foot">
-                    <a id="is-save-reservation-trigger" class="button is-success">Save changes</a>
-                    <a class="button has-modal-close-behavior" data-modal="signup-modal">Cancel</a>
-                </footer>
-            </div>
-        </div>
         <script src="{{ base_url() }}/js/app.js"></script>
     </body>
 </html>

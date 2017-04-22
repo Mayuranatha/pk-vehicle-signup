@@ -48,6 +48,60 @@ function displayNewReservationModal(ev) {
     console.log("[MODAL] new sign up request",carName, day);
 }
 
+function displayEditReservationModal(ev) {
+    var carName = this.getAttribute("data-car-name");
+    var carId = this.getAttribute("data-car-id");
+    var day = this.getAttribute("data-day");
+    var who = this.getAttribute("data-who");
+    var comment = this.getAttribute("data-comment");
+    var reservationId = this.getAttribute("data-reservation-id");
+    var hour_start = this.getAttribute("data-start").substr(11); // needed because the data in the attribute contains the date as well
+    var hour_end = this.getAttribute("data-end").substr(11); // needed because the data in the attribute contains the date as well
+
+
+    var modal = document.getElementById("edit-modal");
+
+    // Making sure that we "deselect" all cars before showing the modal...
+    var allCarOptions = document.querySelectorAll("#edit-reservation-car option");
+    for(var i = 0; i<allCarOptions.length; i++) {
+        allCarOptions[i].removeAttribute("selected");
+    }
+
+    if (reservationId) {
+        document.getElementById("edit-reservation-id").value = reservationId;
+    }
+
+    // If we pass an "car_id" to the modal, then it should be pre-selected...
+    if (carId) {
+        document.getElementById("edit-car-" + carId).setAttribute("selected", true);
+    }
+
+    if (hour_start) {
+        document.getElementById("edit-reservation-hour-start").value = hour_start;
+    }
+
+    if (hour_end) {
+        document.getElementById("edit-reservation-hour-end").value = hour_end;
+    }
+
+    if (day) {
+        document.getElementById("edit-reservation-date").value = day;
+    }
+
+    if (comment) {
+        document.getElementById("edit-reservation-comments").value = comment;
+    }
+
+    if (who) {
+        document.getElementById("edit-reservation-who").value = who;
+    }
+
+
+
+    modal.classList.add("is-active");
+    console.log("[MODAL] edit request", reservationId, carName, day);
+}
+
 
 /*
  * Code to save/edit reservation to the database.
@@ -83,11 +137,76 @@ function saveReservation() {
             alert("Error making reservation");
         }
     });
+}
+
+function updateReservation() {
+    var reservation_date = document.getElementById("edit-reservation-date").value
+    var hour_start = document.getElementById("edit-reservation-hour-start").value
+    var hour_end = document.getElementById("edit-reservation-hour-end").value
+    var who = document.getElementById("edit-reservation-who").value
+    var comments = document.getElementById("edit-reservation-comments").value
+    var id = document.getElementById("edit-reservation-car").value
+    var reservation_id = document.getElementById("edit-reservation-id").value
+
+    var obj = {
+        reservation_id: reservation_id,
+        data: {
+            car_id: id,
+            date: reservation_date,
+            start: hour_start,
+            end: hour_end,
+            who: who,
+            comment: comments
+        }
+    }
+
+    document.getElementById("edit-reservation-modal-footer").innerHTML = "<i class=\"fa fa-spinner fa-spin\"></i>";
+
+    $.post("/signup/update", obj, function(data) {
+        console.log("[AJAX] /signup/update", data);
+
+        if (data.status === "ok") {
+            window.location.reload();
+        } else {
+            alert("Error updating reservation");
+            console.error("[ERROR] /signup/update", data);
+
+        }
+    });
+
+
+}
+
+function removeReservation() {
+
+    var reservation_id = document.getElementById("edit-reservation-id").value
+
+    var obj = {
+        reservation_id: reservation_id
+    }
+
+    document.getElementById("edit-reservation-modal-footer").innerHTML = "<i class=\"fa fa-spinner fa-spin\"></i>";
+
+    $.post("/signup/remove", obj, function(data) {
+        console.log("[AJAX] /signup/remove", data);
+
+        if (data.status === "ok") {
+            window.location.reload();
+        } else {
+            alert("Error removing reservation");
+            console.error("[ERROR] /signup/remove", data);
+
+        }
+    });
 
 
 }
 
 document.getElementById("is-save-reservation-trigger").addEventListener("click", saveReservation);
+document.getElementById("is-edit-reservation-trigger").addEventListener("click", updateReservation);
+document.getElementById("is-remove-reservation-trigger").addEventListener("click", removeReservation);
+
+
 
 
 /*
@@ -114,5 +233,17 @@ for(var i = 0; i<allCloseModalButtons.length; i++) {
         document.getElementById(modalId).classList.remove("is-active");
     });
 }
+
+/*
+ * Code to open modal dialog for editing a reservation.
+ */
+
+
+var allAddButtons = document.querySelectorAll(".is-edit-trigger");
+
+for(var i = 0; i<allAddButtons.length; i++) {
+    allAddButtons[i].addEventListener("click", displayEditReservationModal);
+}
+
 
 $('.timepicker').wickedpicker();

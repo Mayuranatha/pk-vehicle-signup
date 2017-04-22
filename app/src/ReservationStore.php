@@ -165,11 +165,58 @@ final class ReservationStore
     }
 
     public function update_reservation($id, $data) {
+        // check if car is_available is 0, which means the car is somehow unavailable (repair shop, etc)
 
+        $car = $this->get_car($data["car_id"]);
+
+        if ($car->is_available == 0) {
+            return false;
+        }
+
+        $date_created = date(DATE_RFC3339);
+        $start = $data["date"] . " " . $data["start"];
+        $end = $data["date"] . " " . $data["end"];
+        $this->logger->info("START: {$start}");
+        $this->logger->info("END: {$end}");
+
+        $reservation = ORM::for_table('reservation')->find_one($id);
+
+        $reservation->set('who', $data["who"]);
+        $reservation->set('comment', $data["comment"]);
+        $reservation->set('car_id', $data["car_id"]);
+        $reservation->set('date_created', $date_created);
+        try {
+            $start_secs = date_create_from_format("m/d/Y H:i", $start)->format("Y-m-d H:i");
+            $end_secs = date_create_from_format("m/d/Y H:i", $end)->format("Y-m-d H:i");
+            $this->logger->info("SECS: {$start_secs} | {$end_secs}");
+
+            $reservation->set('start', $start_secs);
+            $reservation->set('end', $end_secs);
+
+
+            $result = $reservation->save();
+            $this->logger->info("SQL: " . ORM::get_last_query());
+        } catch(Exception $e) {
+            $this->logger->error("EXCEPTION: " . $e->getMessage());
+            throw $e;
+        }
+
+
+        return $result;
     }
 
     public function delete_reservation($id) {
+        $reservation = ORM::for_table('reservation')->find_one($id);
 
+        try {
+            $result = $reservation->delete();
+            $this->logger->info("SQL: " . ORM::get_last_query());
+        } catch(\Exception $e) {
+            $this->logger->error("EXCEPTION: " . $e->getMessage());
+            throw $e;
+        }
+
+        return $result;
     }
 
     

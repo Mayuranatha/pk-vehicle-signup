@@ -1,0 +1,75 @@
+<div id="edit-modal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Editing Car Reservation</p>
+            <button class="delete has-modal-close-behavior" data-modal="edit-modal"></button>
+        </header>
+        <section class="modal-card-body">
+            <input type="hidden" id="edit-reservation-id" value="">
+
+            <div class="field">
+                <label class="label">Which car is being reserved?</label>
+                <p class="control">
+                            <span class="select">
+                              <select id="edit-reservation-car">
+                                  {% for car in days[0].Cars %}
+                                      {%  if car.is_available == 1 %}
+                                          <option id="edit-car-{{ car.car_id }}" value="{{ car.car_id }}">{{ car.name }}</option>
+                                      {% endif %}
+                                  {% endfor %}
+                              </select>
+                            </span>
+                </p>
+            </div>
+
+            <div class="field">
+                <label class="label">Which date?</label>
+                <p class="control">
+                    <input id="edit-reservation-date" class="input" type="date" placeholder="Text input">
+                </p>
+            </div>
+
+            <div class="columns">
+                <div class="column is-half">
+                    <div class="field">
+                        <label class="label">Start hour?</label>
+                        <p class="control">
+                            <input id="edit-reservation-hour-start" class="input" type="timepicker" class="timepicker">
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="column is-half">
+                    <div class="field">
+                        <label class="label">End hour?</label>
+                        <p class="control">
+                            <input id="edit-reservation-hour-end" class="input" type="timepicker" class="timepicker">
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Who is making the reservation?</label>
+                <p class="control">
+                    <input id="edit-reservation-who" class="input" type="text" placeholder="Text input">
+                </p>
+            </div>
+
+            <div class="field">
+                <label class="label">Comments about the reservation</label>
+                <p class="control">
+                    <textarea id="edit-reservation-comments" class="textarea" placeholder="Textarea"></textarea>
+                </p>
+            </div>
+        </section>
+        <footer id="edit-reservation-modal-footer" class="modal-card-foot">
+            <a id="is-edit-reservation-trigger" class="button is-success">Save changes</a>
+            <a id="is-remove-reservation-trigger" class="button is-danger" data-modal="signup-modal">Delete Reservation</a>
+            <a class="button has-modal-close-behavior" data-modal="edit-modal">Cancel</a>
+
+        </footer>
+    </div>
+</div>

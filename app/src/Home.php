@@ -69,6 +69,57 @@ final class Home
         return $newResponse;
     }
 
+    public function update_signup(Request $request, Response $response, $args)
+    {
+        $this->logger->info("Updating a reservation");
+
+        $parsedBody = $request->getParsedBody();
+
+        $this->logger->info("JSON:", $parsedBody);
+
+        $id = $parsedBody["reservation_id"];
+        $data = $parsedBody["data"];
+        $result = $this->storage->update_reservation($id, $data);
+
+        if ($result) {
+            $data = Array(
+                "status" => "ok"
+            );
+        } else {
+            $data = Array(
+                "status" => "error"
+            );
+        }
+
+        $newResponse = $response->withJson($data,200);
+        return $newResponse;
+    }
+
+    public function remove_signup(Request $request, Response $response, $args)
+    {
+        $this->logger->info("Removing a reservation");
+
+        $parsedBody = $request->getParsedBody();
+
+        $this->logger->info("JSON:", $parsedBody);
+
+        $id = $parsedBody["reservation_id"];
+        $result = $this->storage->delete_reservation($id);
+
+        if ($result) {
+            $data = Array(
+                "status" => "ok"
+            );
+        } else {
+            $data = Array(
+                "status" => "error"
+            );
+        }
+
+        $newResponse = $response->withJson($data,200);
+        return $newResponse;
+    }
+
     public function debug(Request $request, Response $response, $args)
     {
         $this->logger->info("Debug page action dispatched from home.php");
