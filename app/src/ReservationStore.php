@@ -1,7 +1,7 @@
 <?php
 
 use Psr\Log\LoggerInterface;
-use Exception;
+//use Exception;
 
 final class ReservationStore
 {
@@ -217,6 +217,10 @@ final class ReservationStore
         }
 
         return $result;
+    }
+
+    public function check_for_conflict($car_id, $start, $end) {
+
     }
 
     

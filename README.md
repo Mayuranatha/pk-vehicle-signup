@@ -27,3 +27,8 @@ This is a simple app for vehicle signup.
 * `app/routes.php`: All application routes are here
 * `app/src/Home.php`: Action class for the home page
 * `app/templates/home.twig`: Twig template file for the home page
+
+## TODO
+* [ ] Make sure timepicker works
+* [ ] Prevent scheduling conflicts
+* [ ] Update in the background
