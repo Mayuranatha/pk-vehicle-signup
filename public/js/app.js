@@ -126,7 +126,7 @@ function saveReservation() {
         }
     }
 
-    document.getElementById("reservation-modal-footer").innerHTML = "<i class=\"fa fa-spinner fa-spin\"></i>";
+    document.querySelector("#reservation-modal-footer > span:nth-child(1) > i:nth-child(1)").classList.remove("is-hidden");
 
     $.post("/signup/new", obj, function(data) {
         console.log("[AJAX] /signup/new", data);
@@ -134,7 +134,8 @@ function saveReservation() {
         if (data.status === "ok") {
             window.location.reload();
         } else {
-            alert("Error making reservation");
+            alert("Error making reservation: " + data.msg);
+            window.location.reload();
         }
     });
 }
@@ -160,7 +161,7 @@ function updateReservation() {
         }
     }
 
-    document.getElementById("edit-reservation-modal-footer").innerHTML = "<i class=\"fa fa-spinner fa-spin\"></i>";
+    document.querySelector("#reservation-modal-footer > span:nth-child(1) > i:nth-child(1)").classList.remove("is-hidden");
 
     $.post("/signup/update", obj, function(data) {
         console.log("[AJAX] /signup/update", data);
@@ -168,9 +169,9 @@ function updateReservation() {
         if (data.status === "ok") {
             window.location.reload();
         } else {
-            alert("Error updating reservation");
+            alert("Error updating reservation: " + data.msg);
             console.error("[ERROR] /signup/update", data);
-
+            window.location.reload();
         }
     });
 
@@ -185,7 +186,7 @@ function removeReservation() {
         reservation_id: reservation_id
     }
 
-    document.getElementById("edit-reservation-modal-footer").innerHTML = "<i class=\"fa fa-spinner fa-spin\"></i>";
+    document.querySelector("#reservation-modal-footer > span:nth-child(1) > i:nth-child(1)").classList.remove("is-hidden");
 
     $.post("/signup/remove", obj, function(data) {
         console.log("[AJAX] /signup/remove", data);
@@ -195,7 +196,7 @@ function removeReservation() {
         } else {
             alert("Error removing reservation");
             console.error("[ERROR] /signup/remove", data);
-
+            document.querySelector("#reservation-modal-footer > span:nth-child(1) > i:nth-child(1)").classList.add("is-hidden");
         }
     });
 

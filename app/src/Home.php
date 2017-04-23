@@ -55,13 +55,14 @@ final class Home
         $data = $parsedBody["data"];
         $result = $this->storage->make_reservation($id, $data);
 
-        if ($result) {
+        if ($result["status"]) {
             $data = Array(
                 "status" => "ok"
             );
         } else {
             $data = Array(
-                "status" => "error"
+                "status" => "error",
+                "msg" => $result["msg"]
             );
         }
 
@@ -81,13 +82,14 @@ final class Home
         $data = $parsedBody["data"];
         $result = $this->storage->update_reservation($id, $data);
 
-        if ($result) {
+        if ($result["status"]) {
             $data = Array(
                 "status" => "ok"
             );
         } else {
             $data = Array(
-                "status" => "error"
+                "status" => "error",
+                "msg" => $result["msg"]
             );
         }
 
@@ -106,13 +108,14 @@ final class Home
         $id = $parsedBody["reservation_id"];
         $result = $this->storage->delete_reservation($id);
 
-        if ($result) {
+        if ($result["status"]) {
             $data = Array(
                 "status" => "ok"
             );
         } else {
             $data = Array(
-                "status" => "error"
+                "status" => "error",
+                "msg" => $result["msg"]
             );
         }
 

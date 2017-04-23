@@ -102,32 +102,12 @@ final class ReservationStore
         $car = $this->get_car($id);
 
         if ($car->is_available == 0) {
-            return false;
+            return array(
+                "status" => false,
+                "msg"=>"Car is not available"
+            );
         }
 
-        // check if there is a reservation for the given period...
-        // step 1: query for all reservations on the same date range for the given car
-        // step 2: if this results in a non-zero set, then we can't make the reservation (someone already reserved)
-
-        /*
-         * CUE (this works, and detects conflicts in the table after they happen):
-          SELECT *,
-               EXISTS (SELECT 1
-                       FROM reservation AS other
-                       WHERE other.reservation_id != reservation.reservation_id
-                         AND reservation.car_id = other.car_id
-                         AND other.end > reservation.start
-                         AND other.start < reservation.end) AS conflict
-        FROM reservation
-
-        interval algebra: http://en.wikipedia.org/wiki/Allen%27s_Interval_Algebra
-         */
-
-
-        /*
-         * Implementation below makes a reservation without checking for conflicts...
-         * TODO: Check for conflicts (cue interval algebra above)
-         */
 
         $date_created = date(DATE_RFC3339);
         $start = $data["date"] . " " . $data["start"];
@@ -160,7 +140,9 @@ final class ReservationStore
         }
 
 
-        return $result;
+        return array(
+            "status" => $result
+        );
 
     }
 
@@ -170,7 +152,10 @@ final class ReservationStore
         $car = $this->get_car($data["car_id"]);
 
         if ($car->is_available == 0) {
-            return false;
+            return array(
+                "status" => false,
+                "msg"=>"Car is not available"
+            );
         }
 
         $date_created = date(DATE_RFC3339);
@@ -202,7 +187,18 @@ final class ReservationStore
         }
 
 
-        return $result;
+        if (!$this->check_for_conflict($id)) {
+            // conflict with the dates...
+            $reservation->delete();
+            return array(
+                "status" => false,
+                "msg"=>"Conflicting schedule for car"
+            );
+        }
+
+        return array(
+            "status" => $result
+        );
     }
 
     public function delete_reservation($id) {
@@ -219,7 +215,71 @@ final class ReservationStore
         return $result;
     }
 
-    public function check_for_conflict($car_id, $start, $end) {
+    public function check_for_conflict($reservation_id) {
+        // check if there is a reservation for the given period...
+        // step 1: query for all reservations on the same date range for the given car
+        // step 2: if this results in a non-zero set, then we can't make the reservation (someone already reserved)
+
+        /*
+         * CUE (this works, and detects conflicts in the table after they happen):
+          SELECT *,
+               EXISTS (SELECT 1
+                       FROM reservation AS other
+                       WHERE other.reservation_id != reservation.reservation_id
+                         AND reservation.car_id = other.car_id
+                         AND other.end > reservation.start
+                         AND other.start < reservation.end) AS conflict
+        FROM reservation
+
+        interval algebra: http://en.wikipedia.org/wiki/Allen%27s_Interval_Algebra
+         */
+
+
+        /*
+         * Implementation below makes a reservation without checking for conflicts...
+         * TODO: Check for conflicts (cue interval algebra above)
+         */
+
+
+        /*$conflicts = ORM::for_table('reservation')
+            ->where("car_id",$car_id)
+            ->where_gte("end", $start)
+            ->where_lte("start",$end)
+            ->count();
+
+        $this->logger->info("Conflicts SQL: " . ORM::get_last_query());
+        $this->logger->info("Conflicts: " . $conflicts);
+
+
+        if ($conflicts > 0) {
+            return false;
+        }
+
+        return true;*/
+
+        $query = "SELECT *,
+               EXISTS (SELECT 1
+                       FROM reservation AS other
+                       WHERE other.reservation_id != reservation.reservation_id
+                         AND reservation.car_id = other.car_id
+                         AND other.end > reservation.start
+                         AND other.start < reservation.end) AS conflict
+        FROM reservation
+        WHERE reservation.reservation_id = $reservation_id
+        ";
+
+        $reservation = ORM::for_table('reservation')
+            ->raw_query($query)->find_array();
+
+        $this->logger->info("Conflicts SQL: " . ORM::get_last_query());
+        $this->logger->info("Conflicts: " . $reservation);
+
+        if ($reservation[0]["conflict"] == 1) {
+            return false;
+        } else {
+            return true;
+        }
+
 
     }
 
