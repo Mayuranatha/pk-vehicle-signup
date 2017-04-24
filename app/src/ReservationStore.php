@@ -117,8 +117,6 @@ final class ReservationStore
         $this->logger->info("START: {$start}");
         $this->logger->info("END: {$end}");
 
-
-
         $reservation = ORM::for_table('reservation')->create();
 
         $reservation->set('who', $data["who"]);
@@ -126,12 +124,10 @@ final class ReservationStore
         $reservation->set('car_id', $id);
         $reservation->set('date_created', $date_created);
         try {
-            $start_secs = date_create_from_format("m/d/Y H:i", $start)->format("Y-m-d H:i");
-            $end_secs = date_create_from_format("m/d/Y H:i", $end)->format("Y-m-d H:i");
-            $this->logger->info("SECS: {$start_secs} | {$end_secs}");
+            $this->logger->info("Interval: {$start} | {$end}");
 
-            $reservation->set('start', $start_secs);
-            $reservation->set('end', $end_secs);
+            $reservation->set('start', $start);
+            $reservation->set('end', $end);
 
 
             $result = $reservation->save();
@@ -173,12 +169,10 @@ final class ReservationStore
         $reservation->set('car_id', $data["car_id"]);
         $reservation->set('date_created', $date_created);
         try {
-            $start_secs = date_create_from_format("m/d/Y H:i", $start)->format("Y-m-d H:i");
-            $end_secs = date_create_from_format("m/d/Y H:i", $end)->format("Y-m-d H:i");
-            $this->logger->info("SECS: {$start_secs} | {$end_secs}");
+            $this->logger->info("Interval: {$start} | {$end}");
 
-            $reservation->set('start', $start_secs);
-            $reservation->set('end', $end_secs);
+            $reservation->set('start', $start);
+            $reservation->set('end', $end);
 
 
             $result = $reservation->save();

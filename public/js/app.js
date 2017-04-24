@@ -1,7 +1,7 @@
 function displayNewReservationModal(ev) {
     var carName = this.getAttribute("data-car-name");
     var carId = this.getAttribute("data-car-id");
-    var day = this.getAttribute("data-day");
+    var currentDate = this.getAttribute("data-day");
     var who = this.getAttribute("data-who");
     var comment = this.getAttribute("data-comment");
     var reservationId = this.getAttribute("data-reservationId");
@@ -30,8 +30,8 @@ function displayNewReservationModal(ev) {
         document.getElementById("reservation-hour-end").value = hour_end;
     }
 
-    if (day) {
-        document.getElementById("reservation-date").value = day;
+    if (currentDate) {
+        document.getElementById("reservation-date").value = currentDate;
     }
 
     if (comment) {
@@ -45,7 +45,7 @@ function displayNewReservationModal(ev) {
 
 
     modal.classList.add("is-active");
-    console.log("[MODAL] new sign up request",carName, day);
+    console.log("[MODAL] new sign up request",carName, currentDate);
 }
 
 function displayEditReservationModal(ev) {
