@@ -3,3 +3,4 @@ log/*
 cache/*
 .idea
 .DS_Store
+data.sqlite

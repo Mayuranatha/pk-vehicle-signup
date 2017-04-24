@@ -214,7 +214,9 @@ final class ReservationStore
             throw $e;
         }
 
-        return $result;
+        return array(
+            "status" => $result
+        );
     }
 
     public function check_for_conflict($reservation_id) {

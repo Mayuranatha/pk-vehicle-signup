@@ -161,7 +161,7 @@ function updateReservation() {
         }
     }
 
-    document.querySelector("#reservation-modal-footer > span:nth-child(1) > i:nth-child(1)").classList.remove("is-hidden");
+    document.querySelector("#edit-reservation-modal-footer > span:nth-child(1) > i:nth-child(1)").classList.remove("is-hidden");
 
     $.post("/signup/update", obj, function(data) {
         console.log("[AJAX] /signup/update", data);
@@ -186,7 +186,7 @@ function removeReservation() {
         reservation_id: reservation_id
     }
 
-    document.querySelector("#reservation-modal-footer > span:nth-child(1) > i:nth-child(1)").classList.remove("is-hidden");
+    document.querySelector("#edit-reservation-modal-footer > span:nth-child(1) > i:nth-child(1)").classList.remove("is-hidden");
 
     $.post("/signup/remove", obj, function(data) {
         console.log("[AJAX] /signup/remove", data);
