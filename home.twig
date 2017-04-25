@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Vehicle Sign Up</title>
+        <link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <link href='{{ base_url() }}/css/bulma.css' rel='stylesheet' type='text/css'>
+        <link href='{{ base_url() }}/css/font-awesome.css' rel='stylesheet' type='text/css'>
+        <link href='{{ base_url() }}/css/alt.css' rel='stylesheet' type='text/css'>
+        <script src="{{ base_url() }}/js/jquery.js"></script>
+        <script src="{{ base_url() }}/js/wickedpicker.min.js"></script>
+        <style>
+            .is-hour-range {
+                font-size: 1.1em;
+                font-weight: 500;
+                display: block;
+            }
+
+            .is-car-reservation {
+
+            }
+
+            .is-unavailable {
+                background-color: #dedede;
+            }
+
+            hr.pretty {
+                border-top: 1px solid #8c8b8b;
+                text-align: center;
+            }
+            hr.pretty:after {
+                content: '§';
+                display: inline-block;
+                position: relative;
+                top: -14px;
+                padding: 0 10px;
+                background: #ffffff;
+                color: #8c8b8b;
+                font-size: 18px;
+                -webkit-transform: rotate(60deg);
+                -moz-transform: rotate(60deg);
+                transform: rotate(60deg);
+            }
+        </style>
+    </head>
+    <body>
+        <section class="hero is-primary is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Vehicle Sign Up
+                    </h1>
+                    <h2 class="subtitle">
+                        This is <i>alpha</i> software, please report bugs to <a href="mailto:mayuran@hindu.org">Natyam Mayuranatha &mdash; Click here</a>.
+                    </h2>
+
+<h3>
+
+<style>
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #29bc86;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+</style>
+
+<div class="dropdown btn">
+  <span><a href="#"> Menu </a></span>
+  <div class="dropdown-content">
+    <a class="hvr-overline-from-center btn" href="http://agni.local/index.html">Home </a>
+            <a class="hvr-overline-from-center btn" href="http://agni.local/tnotes.html">Talaivar Notes </a>
+            <a class="hvr-overline-from-center btn" href="http://agni.local/treatments.html">Calendar </a>
+            <a class="hvr-overline-from-center btn" href="http://agni.local/shortcodes.html">Festivals </a>
+            <a class="hvr-overline-from-center btn" href="http://agni.local/contact.html">Retreat Schedule </a>
+            <a class="hvr-overline-from-center btn" href="http://agni.local/panchang.html">Panchangam </a>
+            <a class="hvr-overline-from-center btn" href="https://docs.google.com/spreadsheets/d/1ur7Hb8LbmoqFqybGGfwt3c3WKDONyTzR_2ujPKJkdVE/edit#gid=0">Chiro List </a>
+            <a class="hvr-overline-from-center btn" href="http://agni.local/food.html">Food Schedule </a>
+            <a class="hvr-overline-from-center btn" href="http://agni.local/request.html">Feature Request</a>
+
+  </div>
+</div>
+
+
+
+                </div>
+            </div>
+        </section>
+
+        <br>
+        <div class="container">
+            {%  for day in days %}
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+
+                    {% if day.SunOrStar == "Star" %}
+                    <div class="tile box is-child notification is-danger is-2">
+                    {% else %}
+                    <div class="tile box is-child notification is-warning is-2">
+                    {%  endif %}
+                        <p class="title"> {{ day.SunOrStar }} {{ day.SunOrStar_Num }}</p>
+                        <p class="subtitle">{{ day.Date|date("m/d/Y") }}</p>
+                    </div>
+
+                    {% for car in day.Cars %}
+                    {%  if car.is_available == 1 %}
+                    <div class="tile box is-child">
+                    {%  else %}
+                    <div class="tile box is-child is-unavailable is-disabled">
+                    {% endif %}
+                        <p class="title"> {{ car.name }} <i class="fa fa-plus-square-o is-signup-trigger" data-car-id="{{ car.car_id }}" data-car-name="{{ car.name }}" data-day="{{ day.Date|date("Y-m-d") }}"></i> </p>
+                        <p class="subtitle">{{ car.comment }}</p>
+
+                        <ul>
+                            {% for reservation in car.Reservations %}
+                            <li class="is-car-reservation">
+                                <div class="is-hour-range">{{ reservation.start|date("H:i") }} - {{ reservation.end|date("H:i") }}</div>
+                                <p>
+                                    <i>{{ reservation.who }}</i> &mdash; {{ reservation.comment }}.
+                                    <span class="is-edit-trigger"
+                                          data-reservation-id="{{ reservation.reservation_id }}"
+                                          data-car-id="{{ car.car_id }}"
+                                          data-car-name="{{ car.name }}"
+                                          data-day="{{ day.Date|date("Y-m-d") }}"
+                                          data-comment="{{ reservation.comment }}"
+                                          data-start="{{ reservation.start }}"
+                                          data-end="{{ reservation.end }}"
+                                          data-who="{{ reservation.who }}">
+                                        <i class="fa fa-edit"></i>
+                                    </span>
+                                </p>
+                                <hr class="pretty">
+                            </li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+            {%  endfor %}
+        </div>
+        {% include 'signup-modal.twig' with days %}
+        {% include 'edit-modal.twig' with days %}
+
+        <script src="{{ base_url() }}/js/app.js"></script>
+    </body>
+</html>
